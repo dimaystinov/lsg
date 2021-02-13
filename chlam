@@ -1,0 +1,11 @@
+'''
+
+
+# запускаем лонг поллинг
+if __name__ == '__main__':
+    # пока что оставим 10 секунд (в качестве теста)
+
+    loop = asyncio.get_event_loop()
+    loop.create_task(scheduled(10))
+    executor.start_polling(dp, skip_updates=True)
+'''
