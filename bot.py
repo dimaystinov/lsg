@@ -22,8 +22,6 @@ db = SQLighter('db.db')
 sg = lsg()
 
 
-
-
 # Команда активации подписки
 @dp.message_handler(commands=['subscribe'])
 async def subscribe(message: types.Message):
@@ -41,7 +39,7 @@ async def subscribe(message: types.Message):
 # Команда отписки
 @dp.message_handler(commands=['unsubscribe'])
 async def unsubscribe(message: types.Message):
-    if (not db.subscriber_exists(message.from_user.id)):
+    if not db.subscriber_exists(message.from_user.id):
         # если юзера нет в базе, добавляем его с неактивной подпиской (запоминаем)
         db.add_subscriber(message.from_user.id, False)
         await message.answer("Вы итак не подписаны.")
@@ -85,12 +83,11 @@ async def find_post(message: types.Message):
 @dp.message_handler(commands=['pay'])
 async def pay(message: types.Message):
     await message.answer("Введите id предложения")
-    bot.register_next_step_handler(message, get_name)
+    # bot.register_next_step_handler(message, get_name)
     id = message.text
     await message.answer("Введите сумму")
     summa = message.text
     print(id, summa, type(id))
-
 
 
 @dp.message_handler()
@@ -108,9 +105,9 @@ async def scheduled(wait_for):
         new_id = sg.new_id()
 
         if sg.new_id():
-            # если игры есть, переворачиваем список и итерируем
+
             for ng in sg.new_id():
-                # парсим инфу о новой игре
+
                 nfo = sg.post(38)
 
                 # получаем список подписчиков бота
@@ -144,3 +141,17 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.create_task(scheduled(100))
     executor.start_polling(dp, skip_updates=True)
+
+'''
+
+1) Выбор стрима
+2) Выдать картинка - кнопки выбора вариантов
+3) Выбор варианта
+4) Ввод прайса мин макс
+5) Оплата
+6) Добавление его в бд
+7) Вывод успешно оплатил
+8) отправить post запрос lsg максу
+9) когда stream = 1 отправить ссылку
+
+'''
