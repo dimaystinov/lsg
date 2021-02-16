@@ -4,6 +4,9 @@ import asyncio
 from datetime import datetime
 
 from aiogram import Bot, Dispatcher, executor, types
+from aiogram.types import ReplyKeyboardRemove, \
+    ReplyKeyboardMarkup, KeyboardButton, \
+    InlineKeyboardMarkup, InlineKeyboardButton
 from sqlighter import SQLighter
 
 from lsg_parser import lsg
@@ -51,10 +54,14 @@ async def unsubscribe(message: types.Message):
 
 # Команда просмотра всех постов
 @dp.message_handler(commands=['all'])
-async def all_posts(message: types.Message):
-    text = sg.all_posts()
-    for post in text:
-        await message.answer(post["id"])
+async def all_id(message: types.Message):
+
+    id_list = sg.all_id()
+    for ids in id_list:
+        text = sg.post(ids)
+        await message.answer(ids)
+        await bot.send_message(message.from_user.id, text['head'])
+
 
 
 # новый пост
@@ -95,7 +102,7 @@ async def echo_message(msg: types.Message):
     text = sg.post(int(msg.text))
     # await bot.send_message(msg.from_user.id, "Готово")
 
-    await bot.send_message(msg.from_user.id, text)
+    await bot.send_message(msg.from_user.id, text['head'])
 
 
 # проверяем наличие новых игр и делаем рассылки

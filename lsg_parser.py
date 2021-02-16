@@ -44,14 +44,14 @@ class lsg:
                 variants = []
                 for variant in post["get_crowd_reward"]:
                     text = variant["description"]
-                    soup = BS(text)
+                    soup = BS(text, features="html.parser")
 
                     variants.append(variant["name"] + soup.get_text())
 
-                variants_str = "\n\n".join(variants)
+                # variants_str = "\n\n".join(variants)
                 header_str = "\n".join(header)
-
-                return header_str + "\n" + photo + "\n" + variants_str
+                head = header_str + "\n" + photo + "\n"
+                return {"head": head, "variants": variants}
         return "None"
 
     def all_id(self):
@@ -61,29 +61,8 @@ class lsg:
         return all_id_list
 
     def post_info(self, url):
-        link = self.host + url
-        r = requests.get(link)
-        html = BS(r.content, 'html.parser')
 
-        # parse poster image url
-        poster = re.match(r'background-image:\s*url\((.+?)\)', html.select('.image-game-logo > .image')[0]['style'])
-
-        # remove some stuff
-        remels = html.select('.article.article-show > *')
-        for remel in remels:
-            remel.extract()
-
-        # form data
-        info = {
-            "id": self.parse_href(url),
-            "title": html.select('.article-title > a')[0].text,
-            "link": link,
-            "image": poster.group(1),
-            "score": self.identify_score(html.select('.game-lsg-score > .score')[0]['class'][1]),
-            "excerpt": html.select('.article.article-show')[0].text[0:200] + '...'
-        };
-
-        return info
+        return 1
 
     def download_image(self, url):
         r = requests.get(url, allow_redirects=True)
