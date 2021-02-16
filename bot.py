@@ -93,6 +93,8 @@ async def pay(message: types.Message):
 @dp.message_handler()
 async def echo_message(msg: types.Message):
     text = sg.post(int(msg.text))
+    # await bot.send_message(msg.from_user.id, "Готово")
+
     await bot.send_message(msg.from_user.id, text)
 
 

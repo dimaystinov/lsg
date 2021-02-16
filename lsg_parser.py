@@ -11,7 +11,6 @@ class lsg:
     url = 'https://lsg.ru/api/crowd_data'
     lastkey = ""
 
-
     def __init__(self):
         lastkey_file = "lastkey.txt"
         self.lastkey_file = lastkey_file
@@ -29,7 +28,8 @@ class lsg:
         content = (r.content.decode())
         try:
             decoded = json.loads(content)
-        except:
+        except Exception:
+            print(Exception)
             return "Error 123. Format Error"
 
         return decoded
@@ -38,11 +38,21 @@ class lsg:
         posts = self.all_posts()
         for post in posts:
             if post["id"] == id:
-                return post
+                header = [str(post["name"]), "Собрано: " + str(post["sum_now"]) + "Евро",
+                          "Дата стрима: " + str(post["start_date"])]
+                photo = post["image_link"]
+                variants = []
+                for variant in post["get_crowd_reward"]:
+                    text = variant["description"]
+                    soup = BS(text)
+
+                    variants.append(variant["name"] + soup.get_text())
+
+                variants_str = "\n\n".join(variants)
+                header_str = "\n".join(header)
+
+                return header_str + "\n" + photo + "\n" + variants_str
         return "None"
-
-
-
 
     def all_id(self):
         all_id_list = []
@@ -109,7 +119,6 @@ class lsg:
             except Exception:
                 print(Exception)
 
-
     def new_id(self):
         last_id = set(self.last_id())
         all_id = set(self.all_id())
@@ -124,10 +133,6 @@ class lsg:
             return new_id
 
 
-
-
-
-
 # print(sg.new_post())
 
 '''for post in decoded:
@@ -138,3 +143,38 @@ class lsg:
                 print(variant)
             s = str(post["id"]) + post["name"] + str(post["sum_now"]) + str(post["start_date"]) + post["live_status"] + str(post["zoom_text"])
             return ()'''
+
+d = [{"id": 38, "image_link": "https:\/\/lsg.ru\/storage\/crowd\/TuLKQG4x0UHUtGbzFTFg0nA8PBpa5pGWIkZcZK0a.jpeg",
+      "name": "Киберсексуальность дистанционного мира", "sum_now": 56, "start_date": "2020-03-24", "live_status": 0,
+      "zoom_text": "Комната еще не активна", "get_crowd_reward": [
+        {"id": 79, "lot_id": 38, "min_price": 2, "max_price": 19, "name": "Вариант №1",
+         "description": "<p><strong>Позволяет: <\/strong><\/p>\r\n<p>- участвовать в трансляции;&nbsp;<\/p>\r\n<p>- получить записи стрима;&nbsp;<\/p>\r\n<p>&nbsp; &nbsp;<\/p>\r\n<p><em>*Внимание! Если Вы выбираете этот вариант и донатите свыше 20 евро, то система на вариант №2 доната автоматически не переводит<\/em><\/p>",
+         "get_crowd_user_count": 22}, {"id": 80, "lot_id": 38, "min_price": 20, "max_price": 50, "name": "Вариант №2",
+                                       "description": "<p><strong>Позволяет: <\/strong><\/p>\r\n<p>- участвовать в трансляции;&nbsp;<\/p>\r\n<p>- получить записи стрима;&nbsp;&nbsp;<\/p>\r\n<p>- задавать ведущим вопросы в чате;<\/p>\r\n<p>- получить транскрибацию вебинара. &nbsp; &nbsp;<\/p>\r\n<p>&nbsp;<\/p>\r\n<p><em>*Внимание! Транскрибация вебинара высылается в течение 7 дней после окончания мероприятия.<\/em><\/p>",
+                                       "get_crowd_user_count": 0},
+        {"id": 81, "lot_id": 38, "min_price": 50, "max_price": 100, "name": "Вариант №3",
+         "description": "<p><strong>Позволяет: <\/strong><\/p>\r\n<p>- участвовать в трансляции;&nbsp;<\/p>\r\n<p>- получить записи стрима;&nbsp;<\/p>\r\n<p>- задавать ведущим вопросы в чате;<\/p>\r\n<p>- получить транскрибацию вебинара;<\/p>\r\n<p>- получить колекцию фото КиберДивы. &nbsp; &nbsp;<\/p>\r\n<p>&nbsp;<\/p>\r\n<p><em>*Внимание! Транскрибация вебинара высылается в течение 7 дней после окончания мероприятия.<\/em><\/p>",
+         "get_crowd_user_count": 0}, {"id": 82, "lot_id": 38, "min_price": 100, "max_price": 300, "name": "Вариант №4",
+                                      "description": "<p><strong>Позволяет: <\/strong><\/p>\r\n<p>- участвовать в трансляции;&nbsp;<\/p>\r\n<p>- получить записи стрима;&nbsp;<\/p>\r\n<p>- задавать ведущим вопросы в чате;<\/p>\r\n<p>- получить транскрибацию вебинара;<\/p>\r\n<p>- получить колекцию фото КиберДивы;<\/p>\r\n<p>- возможность задать КиберДиве вопрос индивидуально после стрима (дистанционно - 20 минут времени). &nbsp; &nbsp;<\/p>\r\n<p>&nbsp;<\/p>\r\n<p><em>*Внимание! Транскрибация вебинара высылается в течение 7 дней после окончания мероприятия.<\/em><\/p>",
+                                      "get_crowd_user_count": 0},
+        {"id": 83, "lot_id": 38, "min_price": 300, "max_price": 1000, "name": "Вариант №5",
+         "description": "<p><strong>Позволяет:<\/strong><\/p>\r\n<p>- участвовать в трансляции;&nbsp;<\/p>\r\n<p>- получить записи стрима;&nbsp;<\/p>\r\n<p>- задавать ведущим вопросы в чате;<\/p>\r\n<p>- получить транскрибацию вебинара;<\/p>\r\n<p>- получить колекцию фото КиберДивы;<\/p>\r\n<p>- возможность получить индивидуальную дистанционную консультацию с КиберДивой (1 час). &nbsp; &nbsp;<\/p>\r\n<p>&nbsp;<\/p>\r\n<p><em>*Внимание! Транскрибация вебинара высылается в течение 7 дней после окончания мероприятия.<\/em><\/p>",
+         "get_crowd_user_count": 0}]},
+     {"id": 49, "image_link": "https:\/\/lsg.ru\/storage\/blog_img\/sf6prGcAN18PeRBDUssUmU7iIv1TIbfcjV4076kf.jpeg",
+      "name": "Физика накануне прорыва: кризис теории и точки роста", "sum_now": 161, "start_date": "2020-10-27",
+      "live_status": 0, "zoom_text": "Комната еще не активна", "get_crowd_reward": [
+         {"id": 99, "lot_id": 49, "min_price": 2, "max_price": 19, "name": "Вариант №1",
+          "description": "<p><strong>Позволяет: <\/strong><\/p>\r\n<p>- участвовать в трансляции;<\/p>\r\n<p>- получить записи стрима;<\/p>\r\n<p>- задавать вопросы в чате. &nbsp;<\/p>\r\n<p>&nbsp;<\/p>\r\n<p><em>*Внимание! Если Вы выбираете этот вариант и донатите свыше 20 евро, то система на вариант №2 доната автоматически не переводит<\/em><\/p>",
+          "get_crowd_user_count": 41},
+         {"id": 100, "lot_id": 49, "min_price": 20, "max_price": 1000, "name": "Вариант №2",
+          "description": "<p><strong>Позволяет:<\/strong><\/p>\r\n<div>- участвовать в трансляции;<\/div>\r\n<div>- получить записи стрима;<\/div>\r\n<div>- задавать вопросы в чате;<\/div>\r\n<div>- получить транскрибации стрима в формате pdf (текстовая стенография стрима, обработанная профессиональным специалистом).<\/div>\r\n<div>&nbsp;<\/div>\r\n<p><em>*Запись стрима станет доступна донатерам в течение 72 часов после окончания мероприятия, а её транскрибация будет предоставлена не позднее 7 дней после завершения стрима<\/em><\/p>",
+          "get_crowd_user_count": 2}]},
+     {"id": 65, "image_link": "https:\/\/lsg.ru\/storage\/crowd\/LmtLBMA3OUujHHVR0djuctGrCgYqNE3jwFHBQ8gE.jpeg",
+      "name": "ПОЧЕМУ COVID-19 НЕ СМОГ ОБЕСПЕЧИТЬ ОБЕЩАННЫЕ УРОВНИ СВЕРХСМЕРТНОСТИ", "sum_now": 380,
+      "start_date": "2021-02-01", "live_status": 0, "zoom_text": "Комната еще не активна", "get_crowd_reward": [
+         {"id": 110, "lot_id": 65, "min_price": 2, "max_price": 19, "name": "Вариант №1",
+          "description": "<p><strong>Позволяет: <\/strong><\/p>\r\n<p>- участвовать в трансляции;<br \/>- получить записи стрима;<br \/>- задавать вопросы в чате. &nbsp;<\/p>\r\n<p>&nbsp;<\/p>\r\n<p><em>*Внимание! Если Вы выбираете этот вариант и донатите свыше 20 евро, то система на вариант №2 доната автоматически не переводит.&nbsp;Запись стрима станет доступна донатерам в течение 72 часов после окончания мероприятия<\/em><\/p>",
+          "get_crowd_user_count": 89},
+         {"id": 111, "lot_id": 65, "min_price": 20, "max_price": 999, "name": "Вариант №2",
+          "description": "<p><strong>Позволяет:<\/strong><\/p>\r\n<div>- участвовать в трансляции;<\/div>\r\n<div>- получить записи стрима;<\/div>\r\n<div>- задавать вопросы в чате;<\/div>\r\n<div>- получить транскрибации стрима в формате pdf (текстовая стенография стрима, обработанная профессиональным специалистом).<\/div>\r\n<div>&nbsp;<\/div>\r\n<p><em>*Запись и её транскрибация будет предоставлена не позднее 7 дней после завершения стрима<\/em><\/p>",
+          "get_crowd_user_count": 6}]}]
