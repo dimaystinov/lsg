@@ -37,6 +37,7 @@ db = SQLighter('db.db')
 
 # инициализируем парсер
 sg = lsg()
+all_id = sg.all_id()
 
 PRICE = types.LabeledPrice(label='Донат', amount=420)
 
@@ -66,16 +67,21 @@ async def process_buy_command(message: types.Message):
 # Управление кнопками
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('btn'))
 async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
-    code = callback_query.data[-1]
-    if code.isdigit():
-        code = int(code)
+    code = int(callback_query.data.replace("btn",""))
+    sg = lsg()
+    variants = sg.post(code)['variants']
+    #if code.isdigit():
+        #code = int(code)
     await bot.send_message(callback_query.from_user.id, f'Вы выбрали id stream={code}')
+    await bot.send_message(callback_query.from_user.id, 'Выберите варианты')
+    await bot.send_message(callback_query.from_user.id, variants)
+
 
 
 @dp.message_handler(commands=['1'])
 async def process_command_1(message: types.Message):
     await message.reply("Выбрать",
-                        reply_markup=kb.inline_kb[1])
+                        reply_markup=kb.inline_kb[38])
 
 
 @dp.pre_checkout_query_handler(lambda query: True)
@@ -146,6 +152,8 @@ async def all_id(message: types.Message):
         text = sg.post(ids)
         await message.answer(ids)
         await bot.send_message(message.from_user.id, text['head'])
+        await bot.send_message(message.from_user.id, str(ids),
+                               reply_markup=kb.inline_kb[ids])
 
 
 # новый пост
@@ -185,7 +193,7 @@ async def pay(message: types.Message):
 async def echo_message(msg: types.Message):
     try:
         text = sg.post(int(msg.text))
-    # await bot.send_message(msg.from_user.id, "Готово")
+        # await bot.send_message(msg.from_user.id, "Готово")
 
         await bot.send_message(msg.from_user.id, text['head'])
     except:

@@ -2,6 +2,7 @@ from aiogram.types import ReplyKeyboardRemove, \
     ReplyKeyboardMarkup, KeyboardButton, \
     InlineKeyboardMarkup, InlineKeyboardButton
 
+from lsg_parser import lsg
 
 button_hi = KeyboardButton('Привет! 👋')
 
@@ -56,7 +57,10 @@ markup_big.insert(button1)
 markup_big.insert(button6)
 markup_big.insert(KeyboardButton('9️⃣'))
 
-all_id = [1, 2, 3]
+sg1 = lsg()
+all_id = sg1.all_id()
+print(all_id)
+
 button_dict = {}
 
 for i in all_id:
