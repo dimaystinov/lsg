@@ -43,15 +43,17 @@ class lsg:
                 photo = post["image_link"]
                 variants = []
                 for variant in post["get_crowd_reward"]:
+                    print(variant)
                     text = variant["description"]
                     soup = BS(text, features="html.parser")
 
-                    variants.append(variant["name"] + soup.get_text())
-
-                # variants_str = "\n\n".join(variants)
+                    variants.append(str(variant["name"]) + " " + soup.get_text())
+                    print(soup.get_text())
+                variants_btn = "1"
+                variants_str = "\n\n".join(variants)
                 header_str = "\n".join(header)
                 head = header_str + "\n" + photo + "\n"
-                return {"head": head, "variants": variants}
+                return {"head": head, "variants": variants_str, "variants_btn":variants_btn}
         return "None"
 
     def all_id(self):
