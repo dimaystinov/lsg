@@ -53,7 +53,7 @@ class lsg:
                 variants_str = "\n\n".join(variants)
                 header_str = "\n".join(header)
                 head = header_str + "\n" + photo + "\n"
-                return {"head": head, "variants": variants_str, "variants_btn":variants_btn}
+                return {"head": head, "variants": variants_str, "variants_btn": variants_btn}
         return "None"
 
     def all_id(self):
